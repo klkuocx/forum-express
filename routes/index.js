@@ -15,5 +15,5 @@ module.exports = (app) => {
   app.post('/signup', userController.signUp)
   app.get('/signin', userController.signInPage)
   app.post('/signin', userController.signIn)
-  app.get('logout', userController.logout)
+  app.get('/logout', userController.logout)
 }

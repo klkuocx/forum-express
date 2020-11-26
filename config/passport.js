@@ -17,7 +17,7 @@ module.exports = app => {
     User.findOne({ where: { email } }).then(user => {
       if (!user) return done(null, false, req.flash('error_messages', 'That email is not registered!'))
       if (!bcrypt.compareSync(password, user.password)) return done(null, false, req.flash('error_messages', 'Email or Password incorrect.'))
-      return done(null, user, req.flash('success_messages', `Welcome, ${user.name}`))
+      return done(null, user.toJSON(), req.flash('success_messages', `Welcome, ${user.name}`))
     }).catch(err => done(err, null))
   }))
 
