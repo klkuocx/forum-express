@@ -10,7 +10,10 @@ module.exports = (app) => {
   app.get('/admin', (req, res) => res.redirect('/admin/restaurants'))
   app.get('/admin/restaurants', adminController.getRestaurants)
 
-  // signup
+  // signup & signin & logout
   app.get('/signup', userController.signUpPage)
   app.post('/signup', userController.signUp)
+  app.get('/signin', userController.signInPage)
+  app.post('/signin', userController.signIn)
+  app.get('logout', userController.logout)
 }

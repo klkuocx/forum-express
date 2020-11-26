@@ -3,6 +3,7 @@ const handlebars = require('express-handlebars')
 const db = require('./models')
 const bodyParser = require('body-parser')
 const session = require('express-session')
+const usePassport = require('./config/passport.js')
 const flash = require('connect-flash')
 const app = express()
 const port = 3000
@@ -19,6 +20,8 @@ app.use((req, res, next) => {
   res.locals.error_messages = req.flash('error_messages')
   next()
 })
+
+usePassport(app)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)
