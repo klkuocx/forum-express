@@ -7,7 +7,7 @@ const session = require('express-session')
 const usePassport = require('./config/passport.js')
 const flash = require('connect-flash')
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 
 app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
