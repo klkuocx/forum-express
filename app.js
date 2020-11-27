@@ -14,9 +14,9 @@ app.set('view engine', 'handlebars')
 
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(methodOverride('_method'))
+app.use('/upload', express.static(__dirname + '/upload'))
 app.use(session({ secret: 'WhySoSerious', resave: false, saveUninitialized: false }))
 app.use(flash())
-
 usePassport(app)
 
 app.use((req, res, next) => {

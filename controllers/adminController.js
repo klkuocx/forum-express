@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 const db = require('../models')
 const Restaurant = db.Restaurant
 
@@ -14,14 +16,30 @@ const adminController = {
 
   postRestaurant: (req, res) => {
     const restaurant = req.body
+    const { file } = req
     if (!restaurant.name) {
       req.flash('error_messages', "name field is required.")
       return res.redirect('back')
     }
-    Restaurant.create(restaurant).then(restaurant => {
-      req.flash('success_messages', `restaurant '${restaurant.name}' was created successfully!`)
-      res.redirect('/admin/restaurants')
-    })
+
+    if (file) {
+      fs.readFile(file.path, (err, data) => {
+        if (err) console.log('Error: ', err)
+        fs.writeFile(`upload/${file.originalname}`, data, () => {
+          restaurant.image = file ? `/upload/${file.originalname}` : null
+          return Restaurant.create(restaurant).then(restaurant => {
+            req.flash('success_messages', `restaurant '${restaurant.name}' was created successfully!`)
+            res.redirect('/admin/restaurants')
+          })
+        })
+      })
+    } else {
+      restaurant.image = null
+      return Restaurant.create(restaurant).then(restaurant => {
+        req.flash('success_messages', `restaurant '${restaurant.name}' was created successfully!`)
+        res.redirect('/admin/restaurants')
+      })
+    }
   },
 
   getRestaurant: (req, res) => {
@@ -38,16 +56,34 @@ const adminController = {
 
   putRestaurant: (req, res) => {
     const update = req.body
+    const { file } = req
     if (!update.name) {
       req.flash('error_messages', "name field is required.")
       return res.redirect('back')
     }
-    Restaurant.findByPk(req.params.id).then(restaurant => {
-      restaurant.update(update).then(restaurant => {
-        req.flash('success_messages', `restaurant '${restaurant.name}' was updated successfully!`)
-        res.redirect('/admin/restaurants')
+
+    if (file) {
+      fs.readFile(file.path, (err, data) => {
+        if (err) console.log('Error: ', err)
+        fs.writeFile(`upload/${file.originalname}`, data, () => {
+          return Restaurant.findByPk(req.params.id).then(restaurant => {
+            update.image = file ? `/upload/${file.originalname}` : restaurant.image
+            restaurant.update(update).then(restaurant => {
+              req.flash('success_messages', `restaurant '${restaurant.name}' was updated successfully!`)
+              res.redirect('/admin/restaurants')
+            })
+          })
+        })
       })
-    })
+    } else {
+      Restaurant.findByPk(req.params.id).then(restaurant => {
+        update.image = restaurant.image
+        restaurant.update(update).then(restaurant => {
+          req.flash('success_messages', `restaurant '${restaurant.name}' was updated successfully!`)
+          res.redirect('/admin/restaurants')
+        })
+      })
+    }
   },
 
   deleteRestaurant: (req, res) => {
