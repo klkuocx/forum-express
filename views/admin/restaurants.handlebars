@@ -31,11 +31,31 @@
             Edit
           </a>
         </button>
-        <form action="/admin/restaurants/{{this.id}}?_method=DELETE" method="POST" style="display: inline;">
-          <button type="submit" class="btn btn-link">Delete</button>
-        </form>
+        <button type="button" class="btn btn-link" data-toggle="modal" data-target="#deleteModal-{{this.id}}">
+          Delete
+        </button>
       </td>
     </tr>
     {{/each}}
   </tbody>
 </table>
+
+<!-- Delete Modal -->
+{{#each restaurants}}
+<div class="modal fade" id="deleteModal-{{this.id}}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <big class="modal-body">
+        Do you want to delete "<strong>{{this.name}}</strong>" ?
+      </big>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">cancel</button>
+        <form action="/admin/restaurants/{{this.id}}?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">delete</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{/each}}
