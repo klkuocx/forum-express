@@ -1,6 +1,6 @@
 // require packages
 const express = require('express')
-const handlebars = require('express-handlebars')
+const useHandlebars = require('./config/handlebars')
 const db = require('./models')
 const bodyParser = require('body-parser')
 const methodOverride = require('method-override')
@@ -19,8 +19,7 @@ const app = express()
 const PORT = process.env.PORT
 
 // set view engine
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
-app.set('view engine', 'handlebars')
+useHandlebars(app)
 
 // use middleware
 app.use(bodyParser.urlencoded({ extended: true }))

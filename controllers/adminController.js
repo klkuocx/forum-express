@@ -3,8 +3,10 @@ const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
 const db = require('../models')
 const Restaurant = db.Restaurant
+const User = db.User
 
 const adminController = {
+  // Manage Restaurants
   getRestaurants: (req, res) => {
     Restaurant.findAll({ raw: true }).then(restaurants => {
       res.render('admin/restaurants', { restaurants })
@@ -90,6 +92,25 @@ const adminController = {
       restaurant.destroy().then(restaurant => {
         req.flash('success_messages', `restaurant '${restaurant.name}' was deleted successfully!`)
         res.redirect('/admin/restaurants')
+      })
+    })
+  },
+
+  // Manage Users
+  getUsers: (req, res) => {
+    User.findAll({ raw: true }).then(users => {
+      res.render('admin/users', { users })
+    })
+  },
+
+  putUsers: (req, res) => {
+    User.findByPk(req.params.id).then(user => {
+      console.log('user.isAdmin_before:', user.isAdmin)
+      user.isAdmin = !user.isAdmin
+      console.log('user.isAdmin_after:', user.isAdmin)
+      user.save().then(user => {
+        req.flash('success_messages', `user '${user.name}' was updated successfully!`)
+        res.redirect('/admin/users')
       })
     })
   }

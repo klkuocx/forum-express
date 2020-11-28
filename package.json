@@ -40,5 +40,6 @@
     "sequelize-cli": "^6.2.0",
     "sinon": "^9.2.0",
     "supertest": "^5.0.0"
-  }
+  },
+  "devDependencies": {}
 }
