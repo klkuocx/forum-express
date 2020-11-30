@@ -32,7 +32,7 @@
       </td>
       <td>
         <button type="button" class="btn btn-link" data-toggle="modal" data-target="#toggleModal-{{this.id}}"
-          {{#ifSame this.id '===' ../user.id}}disabled{{/ifSame}}>
+          {{#ifSame this.id ../user.id}}disabled{{/ifSame}}>
           set as {{#if this.isAdmin}}user{{else}}admin{{/if}}
         </button>
       </td>
