@@ -3,14 +3,33 @@ const Category = db.Category
 
 const categoryController = {
   getCategories: (req, res) => {
+    const { id } = req.params
     Category.findAll({ raw: true, nest: true }).then(categories => {
-      res.render('admin/categories', { categories })
+      if (id) {
+        const category = categories.find(item => item.id.toString() === id)
+        return res.render('admin/categories', { categories, category })
+      }
+      return res.render('admin/categories', { categories })
     })
   },
 
   postCategory: (req, res) => {
     const category = req.body
-    Category.create(category).then(() => res.redirect('/admin/categories'))
+    Category.create(category).then(category => {
+      req.flash('success_messages', `category '${category.name}' was created successfully!`)
+      res.redirect('/admin/categories')
+    })
+  },
+
+  putCategory: (req, res) => {
+    const { id } = req.params
+    const update = req.body
+    Category.findByPk(id).then(category => {
+      category.update(update).then(category => {
+        req.flash('success_messages', `category '${category.name}' was updated successfully!`)
+        res.redirect('/admin/categories')
+      })
+    })
   }
 }
 
