@@ -40,6 +40,7 @@ module.exports = (app) => {
   app.put('/admin/users/:id/toggleAdmin', authenticatedAdmin, adminController.putUsers)
   // admin interface - manage categories
   app.get('/admin/categories', authenticatedAdmin, categoryController.getCategories)
+  app.post('/admin/categories', authenticatedAdmin, categoryController.postCategory)
 
   // signup & signin & logout
   app.get('/signup', userController.signUpPage)

@@ -7,6 +7,11 @@ const categoryController = {
       res.render('admin/categories', { categories })
     })
   },
+
+  postCategory: (req, res) => {
+    const category = req.body
+    Category.create(category).then(() => res.redirect('/admin/categories'))
+  }
 }
 
 module.exports = categoryController
