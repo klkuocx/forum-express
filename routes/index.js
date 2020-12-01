@@ -29,6 +29,7 @@ module.exports = (app) => {
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   // user interface - comments
   app.post('/comments', authenticated, commentController.postComment)
+  app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
 
   // admin interface - manage restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
