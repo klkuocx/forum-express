@@ -30,6 +30,10 @@ module.exports = (app) => {
   // user interface - comments
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+  // user interface - profile
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticated, userController.editUser)
+  app.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 
   // admin interface - manage restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
