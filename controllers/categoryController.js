@@ -15,6 +15,10 @@ const categoryController = {
 
   postCategory: (req, res) => {
     const category = req.body
+    if (!category.name) {
+      req.flash('error_messages', 'name didn\'t exist')
+      return res.redirect('back')
+    }
     Category.create(category).then(category => {
       req.flash('success_messages', `category '${category.name}' was created successfully!`)
       res.redirect('/admin/categories')
