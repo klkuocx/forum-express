@@ -67,7 +67,6 @@ const userController = {
           .map(id => restaurants.find(item => item.id === id))
 
         return res.render('profile', {
-          user: req.user,
           profile: user.toJSON(),
           countOfComments,
           countOfRests: uniqueRests.length || 0,
@@ -79,7 +78,7 @@ const userController = {
 
   editUser: (req, res) => {
     User.findByPk(req.params.id).then(user =>
-      res.render('profileEdit', { user: req.user, profile: user.toJSON() })
+      res.render('profileEdit', { profile: user.toJSON() })
     )
   },
 
