@@ -1,3 +1,5 @@
+const helper = require('../_helpers')
+
 const db = require('../models')
 const Restaurant = db.Restaurant
 const Category = db.Category
@@ -38,7 +40,8 @@ const restController = {
       // clean up restaurant data
       const data = result.rows.map(r => ({
         ...r,
-        description: r.description.substring(0, 50)
+        description: r.description.substring(0, 50),
+        isFavorited: helper.getUser(req).FavoritedRestaurants.map(item => item.id).includes(r.id)
       }))
       Category.findAll({
         raw: true,
