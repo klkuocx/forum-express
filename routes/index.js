@@ -23,6 +23,14 @@ module.exports = (app) => {
     res.redirect('/signin')
   }
 
+  const authenticatedUser = (req, res, next) => {
+    if (helpers.ensureAuthenticated(req)) {
+      if (helpers.getUser(req).id === Number(req.params.id)) return next()
+      return res.redirect('back')
+    }
+    res.redirect('/signin')
+  }
+
   // user interface - restaurants
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
@@ -30,6 +38,10 @@ module.exports = (app) => {
   // user interface - comments
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+  // user interface - profile
+  app.get('/users/:id', authenticated, userController.getUser)
+  app.get('/users/:id/edit', authenticatedUser, userController.editUser)
+  app.put('/users/:id', authenticatedUser, upload.single('image'), userController.putUser)
 
   // admin interface - manage restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
