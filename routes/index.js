@@ -31,9 +31,11 @@ module.exports = (app) => {
     res.redirect('/signin')
   }
 
-  // user interface - restaurants
+  // user interface - index
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
+  app.get('/restaurants/feeds', authenticated, restController.getFeeds)
+  // user interface - restaurants
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
   // user interface - comments
   app.post('/comments', authenticated, commentController.postComment)
