@@ -64,7 +64,10 @@ const restController = {
         { model: Comment, include: User }
       ]
     }).then(restaurant => {
-      res.render('restaurant', { restaurant: restaurant.toJSON() })
+      restaurant.viewCounts = restaurant.viewCounts + 1
+      restaurant.save().then(restaurant =>
+        res.render('restaurant', { restaurant: restaurant.toJSON() })
+      )
     })
   },
 
@@ -86,6 +89,26 @@ const restController = {
       })
     ]).then(([restaurants, comments]) => {
       return res.render('feeds', { restaurants, comments })
+    })
+  },
+
+  getDashboard: (req, res) => {
+    const RestaurantId = req.params.id
+    Promise.all([
+      Restaurant.findByPk(RestaurantId, {
+        raw: true,
+        nest: true,
+        include: Category
+      }),
+      Comment.findAndCountAll({
+        raw: true,
+        nest: true,
+        where: { RestaurantId },
+        include: Restaurant
+      })
+    ]).then(([restaurant, comments]) => {
+      const countOfComments = comments.count
+      return res.render('dashboard', { restaurant, countOfComments })
     })
   }
 }
