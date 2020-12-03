@@ -149,6 +149,22 @@ const userController = {
     Like.findOne({ where: { UserId, RestaurantId } }).then(like =>
       like.destroy().then(() => res.redirect('back'))
     )
+  },
+
+  getTopUser: (req, res) => {
+    User.findAll({
+      raw: true,
+      nest: true,
+      include: { model: User, as: 'Followers' }
+    }).then(users => {
+      users = users.map(user => ({
+        ...user,
+        FollowerCounts: user.Followers.length,
+        isFollowed: req.user.Followings.map(item => item.id).includes(user.id)
+      }))
+      users = users.sort((a, b) => b.FollowerCounts - a.FollowerCounts)
+      return res.render('topUser', { users })
+    })
   }
 }
 

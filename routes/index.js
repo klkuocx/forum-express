@@ -41,6 +41,8 @@ module.exports = (app) => {
   // user interface - comments
   app.post('/comments', authenticated, commentController.postComment)
   app.delete('/comments/:id', authenticatedAdmin, commentController.deleteComment)
+  // user interface - top user
+  app.get('/users/top', authenticated, userController.getTopUser)
   // user interface - profile
   app.get('/users/:id', authenticated, userController.getUser)
   app.get('/users/:id/edit', authenticatedUser, userController.editUser)
