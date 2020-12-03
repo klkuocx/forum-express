@@ -68,9 +68,13 @@ const restController = {
       ]
     }).then(restaurant => {
       restaurant.viewCounts = restaurant.viewCounts + 1
-      restaurant.save().then(restaurant =>
-        res.render('restaurant', { restaurant: restaurant.toJSON() })
-      )
+      restaurant.save().then(restaurant => {
+        const isFavorited = helper.getUser(req).FavoritedRestaurants.map(item => item.id).includes(restaurant.id)
+        return res.render('restaurant', {
+          restaurant: restaurant.toJSON(),
+          isFavorited
+        })
+      })
     })
   },
 
