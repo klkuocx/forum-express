@@ -10,6 +10,7 @@ const User = db.User
 const Comment = db.Comment
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
+const Like = db.Like
 
 const userController = {
   // User authentication
@@ -131,6 +132,22 @@ const userController = {
     const { RestaurantId } = req.params
     Favorite.findOne({ where: { UserId, RestaurantId } }).then(favorite =>
       favorite.destroy().then(() => res.redirect('back'))
+    )
+  },
+
+  // Like restaurants
+  like: (req, res) => {
+    const UserId = helper.getUser(req).id
+    const RestaurantId = req.params.restaurantId
+    Like.create({ UserId, RestaurantId })
+      .then(() => res.redirect('back'))
+  },
+
+  unlike: (req, res) => {
+    const UserId = helper.getUser(req).id
+    const RestaurantId = req.params.restaurantId
+    Like.findOne({ where: { UserId, RestaurantId } }).then(like =>
+      like.destroy().then(() => res.redirect('back'))
     )
   }
 }
