@@ -1,12 +1,15 @@
 const imgur = require('imgur-node-api')
 const IMGUR_CLIENT_ID = process.env.IMGUR_CLIENT_ID
 
+const helper = require('../_helpers')
+
 const bcrypt = require('bcryptjs')
 const passport = require('passport')
 const db = require('../models')
 const User = db.User
 const Comment = db.Comment
 const Restaurant = db.Restaurant
+const Favorite = db.Favorite
 
 const userController = {
   // User authentication
@@ -112,6 +115,23 @@ const userController = {
         })
       })
     }
+  },
+
+  // Favorite restaurants
+  addFavorite: (req, res) => {
+    const UserId = helper.getUser(req).id
+    const { RestaurantId } = req.params
+    Favorite.create({ UserId, RestaurantId }).then(() =>
+      res.redirect('back')
+    )
+  },
+
+  removeFavorite: (req, res) => {
+    const UserId = helper.getUser(req).id
+    const { RestaurantId } = req.params
+    Favorite.findOne({ where: { UserId, RestaurantId } }).then(favorite =>
+      favorite.destroy().then(() => res.redirect('back'))
+    )
   }
 }
 

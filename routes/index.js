@@ -45,6 +45,9 @@ module.exports = (app) => {
   app.get('/users/:id', authenticated, userController.getUser)
   app.get('/users/:id/edit', authenticatedUser, userController.editUser)
   app.put('/users/:id', authenticatedUser, upload.single('image'), userController.putUser)
+  // user interface - favorites
+  app.post('/favorite/:RestaurantId', authenticated, userController.addFavorite)
+  app.delete('/favorite/:RestaurantId', authenticated, userController.removeFavorite)
 
   // admin interface - manage restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))
