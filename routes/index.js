@@ -53,6 +53,9 @@ module.exports = (app) => {
   // user interface - likes
   app.post('/like/:restaurantId', authenticated, userController.like)
   app.delete('/like/:restaurantId', authenticated, userController.unlike)
+  // user interface - followship
+  app.post('/following/:userId', authenticated, userController.follow)
+  app.delete('/following/:userId', authenticated, userController.unfollow)
 
   // admin interface - manage restaurants
   app.get('/admin', authenticatedAdmin, (req, res) => res.redirect('/admin/restaurants'))

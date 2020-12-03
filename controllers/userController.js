@@ -11,6 +11,7 @@ const Comment = db.Comment
 const Restaurant = db.Restaurant
 const Favorite = db.Favorite
 const Like = db.Like
+const Followship = db.Followship
 
 const userController = {
   // User authentication
@@ -153,18 +154,32 @@ const userController = {
 
   getTopUser: (req, res) => {
     User.findAll({
-      raw: true,
-      nest: true,
-      include: { model: User, as: 'Followers' }
+      include: [{ model: User, as: 'Followers' }]
     }).then(users => {
       users = users.map(user => ({
-        ...user,
-        FollowerCounts: user.Followers.length,
+        ...user.dataValues,
+        FollowerCount: user.Followers.length,
         isFollowed: req.user.Followings.map(item => item.id).includes(user.id)
       }))
-      users = users.sort((a, b) => b.FollowerCounts - a.FollowerCounts)
+      users = users.sort((a, b) => b.FollowerCount - a.FollowerCount)
       return res.render('topUser', { users })
     })
+  },
+
+  follow: (req, res) => {
+    const followerId = req.user.id
+    const followingId = req.params.userId
+    Followship.create({ followerId, followingId })
+      .then(() => res.redirect('back'))
+  },
+
+  unfollow: (req, res) => {
+    const followerId = req.user.id
+    const followingId = req.params.userId
+    Followship.findOne({ where: { followerId, followingId } })
+      .then(followship => {
+        followship.destroy().then(() => res.redirect('back'))
+      })
   }
 }
 
