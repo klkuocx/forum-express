@@ -34,6 +34,7 @@ module.exports = (app) => {
   // user interface - index
   app.get('/', authenticated, (req, res) => res.redirect('/restaurants'))
   app.get('/restaurants', authenticated, restController.getRestaurants)
+  app.get('/restaurants/top', authenticated, restController.getTop10Rest)
   app.get('/restaurants/feeds', authenticated, restController.getFeeds)
   // user interface - restaurants
   app.get('/restaurants/:id', authenticated, restController.getRestaurant)
