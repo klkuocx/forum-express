@@ -78,7 +78,7 @@ const userController = {
       const followers = userJSON.Followers
       const FavoritedRestaurants = userJSON.FavoritedRestaurants
 
-      const allCommentedRests = userJSON.Comments.map(comment => comment.Restaurant)
+      const allCommentedRests = userJSON.Comments.map(comment => comment.Restaurant).filter(r => r !== null)
       const uniqueRests = Array.from(new Set(allCommentedRests
         .map(item => item.id)))
         .map(id => allCommentedRests.find(item => item.id === id))
