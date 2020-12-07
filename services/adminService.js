@@ -15,6 +15,12 @@ const adminService = {
       include: [Category]
     }).then(restaurants => callback({ restaurants }))
   },
+
+  getRestaurant: (req, res, callback) => {
+    Restaurant.findByPk(req.params.id, { include: [Category] }).then(restaurant =>
+      callback({ restaurant: restaurant.toJSON() })
+    )
+  },
 }
 
 module.exports = adminService
