@@ -23,6 +23,7 @@ useHandlebars(app)
 
 // use middleware
 app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 app.use(methodOverride('_method'))
 app.use('/upload', express.static(__dirname + '/upload'))
 app.use(session({ secret: 'WhySoSerious', resave: false, saveUninitialized: false }))
