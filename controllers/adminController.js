@@ -44,34 +44,14 @@ const adminController = {
   },
 
   putRestaurant: (req, res) => {
-    const update = req.body
-    const { file } = req
-    if (!update.name) {
-      req.flash('error_messages', "name field is required.")
-      return res.redirect('back')
-    }
-
-    if (file) {
-      imgur.setClientID(IMGUR_CLIENT_ID)
-      imgur.upload(file.path, (err, img) => {
-        if (err) console.log('Error: ', err)
-        return Restaurant.findByPk(req.params.id).then(restaurant => {
-          update.image = file ? img.data.link : restaurant.image
-          restaurant.update(update).then(restaurant => {
-            req.flash('success_messages', `restaurant '${restaurant.name}' was updated successfully!`)
-            res.redirect('/admin/restaurants')
-          })
-        })
-      })
-    } else {
-      Restaurant.findByPk(req.params.id).then(restaurant => {
-        update.image = restaurant.image
-        restaurant.update(update).then(restaurant => {
-          req.flash('success_messages', `restaurant '${restaurant.name}' was updated successfully!`)
-          res.redirect('/admin/restaurants')
-        })
-      })
-    }
+    adminService.putRestaurant(req, res, (data) => {
+      if (data.status === 'error') {
+        req.flash('error_messages', data.message)
+        return res.redirect('back')
+      }
+      req.flash('success_messages', data.message)
+      return res.redirect('/admin/restaurants')
+    })
   },
 
   deleteRestaurant: (req, res) => {

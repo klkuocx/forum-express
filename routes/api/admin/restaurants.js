@@ -10,6 +10,7 @@ const upload = multer({ dest: 'temp/' })
 router.get('/', adminController.getRestaurants)
 router.get('/:id', adminController.getRestaurant)
 router.post('/', upload.single('image'), adminController.postRestaurant)
+router.put('/:id', upload.single('image'), adminController.putRestaurant)
 router.delete('/:id', adminController.deleteRestaurant)
 
 module.exports = router
