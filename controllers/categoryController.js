@@ -20,13 +20,11 @@ const categoryController = {
   },
 
   putCategory: (req, res) => {
-    const { id } = req.params
-    const update = req.body
-    Category.findByPk(id).then(category => {
-      category.update(update).then(category => {
-        req.flash('success_messages', `category '${category.name}' was updated successfully!`)
+    categoryService.putCategory(req, res, (data) => {
+      if (data.status === 'success') {
+        req.flash('success_messages', data.message)
         res.redirect('/admin/categories')
-      })
+      }
     })
   },
 
