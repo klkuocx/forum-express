@@ -13,6 +13,14 @@ const adminController = {
   getRestaurant: (req, res) => {
     adminService.getRestaurant(req, res, (data) => res.json(data))
   },
+
+  deleteRestaurant: (req, res) => {
+    Restaurant.findByPk(req.params.id).then(restaurant => {
+      restaurant.destroy().then(restaurant => {
+        res.json({ status: 'success', message: `restaurant '${restaurant.name}' was deleted successfully!` })
+      })
+    })
+  }
 }
 
 module.exports = adminController
