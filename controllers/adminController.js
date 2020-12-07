@@ -91,11 +91,11 @@ const adminController = {
   },
 
   deleteRestaurant: (req, res) => {
-    Restaurant.findByPk(req.params.id).then(restaurant => {
-      restaurant.destroy().then(restaurant => {
-        req.flash('success_messages', `restaurant '${restaurant.name}' was deleted successfully!`)
+    adminService.deleteRestaurant(req, res, (data) => {
+      if (data.status === 'success') {
+        req.flash('success_messages', data.message)
         res.redirect('/admin/restaurants')
-      })
+      }
     })
   },
 

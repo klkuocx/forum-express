@@ -21,6 +21,14 @@ const adminService = {
       callback({ restaurant: restaurant.toJSON() })
     )
   },
+
+  deleteRestaurant: (req, res, callback) => {
+    Restaurant.findByPk(req.params.id).then(restaurant => {
+      restaurant.destroy().then(restaurant => {
+        callback({ status: 'success', message: `restaurant '${restaurant.name}' was deleted successfully!` })
+      })
+    })
+  }
 }
 
 module.exports = adminService

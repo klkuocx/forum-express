@@ -15,11 +15,7 @@ const adminController = {
   },
 
   deleteRestaurant: (req, res) => {
-    Restaurant.findByPk(req.params.id).then(restaurant => {
-      restaurant.destroy().then(restaurant => {
-        res.json({ status: 'success', message: `restaurant '${restaurant.name}' was deleted successfully!` })
-      })
-    })
+    adminService.deleteRestaurant(req, res, (data) => res.json(data))
   }
 }
 
